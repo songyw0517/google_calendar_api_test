@@ -5,7 +5,7 @@ practice google calendar api
 1. google calendar api를 사용하는 방법 알아보기
 2. Error report
 3. 코드 리뷰
-4. 시도해 볼만한 기능들
+4. 마치며
 
 # google calendar api 사용방법
 > flask에서 사용해보고 싶기 때문에 python으로 quick start를 시도했다.
@@ -105,14 +105,26 @@ The redirect URI in the request,~~~
 7. 다시 실행하면 구글 계정을 선택할 수 있게 된다.
 
 # Error Report
-1. quickstart의 enable the google calendar api로 했을 때 리디렉션 URI 에러에서 어떻게 해야하는지 막혔었다. 그래서 google api 콘솔에서 설정하는 방법으로 수행한 것이다.
-2. 리디렉션 문제도 처음에 보고 어떻게 처리해야하는지 막막했었다. 이것저것 방법들을 시도하다가 알아내었다.
+1. quickstart의 enable the google calendar api로 했을 때 리디렉션 URI 에러에서 어떻게 해야하는지 막혔었다.
+> 그래서 google api 콘솔에서 설정하는 방법으로 수행한 것이다.<br>그런데 나중에 새로고침을 하니 google api 대쉬보드에 quickstart 항목이 있었다;;
+
+2. 리디렉션 문제도 처음에 보고 어떻게 처리해야하는지 막막했었다.
+> google api에서 리디렉션에 uri를 추가하면 해결이 되었다.<br>파이썬의 쉘을 껐다가 다시 실행시키면 uri가 달라지므로 쉘을 끄지 않고 다시 접속해야한다.
+
 3. 구글 계정을 선택하면 '확인되지 않은 앱'이라는 에러가 뜬다. 
 > 고급 버튼을 누른 뒤에 만들어준 api 프로젝트 이름으로 이동버튼을 누르고 허용 버튼을 눌러주면 된다.
 
+4. invalid_client: Unauthorized', '{\n  "error": "invalid_client",\n  "error_description": "Unauthorized"\n}'
+> 권한이 없다는 오류도 떴었다. google api의 credentials.json 파일에서 문제가 있었던 것 같다.
+
+5. Request had insufficient authentication scopes.
+> 인증 범위를 벗어났다는 오류이다. calendar.readonly 상태에서 insert메소드를 수행해서 생긴 문제였다.<br>
+> https://www.googleapis.com/auth/calendar 를 사용하기위해 고군분투 했었다.<br>
+> google api의 oauth 동의화면 -> 앱 수정 -> 'Google API의 범위'를 calendar.readonly 뿐만 아니라 calendar도 포함을 시켜야한다.
+
+
 # Code Review
 > 다른 개발자가 작성한 코드를 가지고 추측을 해본다.
-
 
 참고) https://ai-creator.tistory.com/19?category=759438
 ``` python
@@ -273,3 +285,11 @@ def main():
 if __name__ == '__main__':
     main()
 ```
+
+# fin (마치며)
+> 이번에는 Google API를 사용하는 방법에 대해 알아보았다.<br>
+> 자세한 내용은 잘 모르겠지만, google api reference를 참조하면 금방 활용할 수 있을 정도이고<br>
+> 아직 개념에 대한 정보가 많이 부족하다. 이번에 구글링을 하면서 알아볼 것들을 간단히 정리해본다.<br>
+> -> jwt, 토큰, api / 저번 플라스크에서 blueprint 등<br>
+> 이로써 내 구글 캘린더에 접근하여 조회, 변경, 추가 등의 기능을 할 수 있다는 것에 기쁘다 <br>
+> 다음에는 이전에 수행했던 플라스크, 데이터베이스와 함께 다루어 하나의 웹 사이트를 만들어볼 예정이다.
